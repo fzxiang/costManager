@@ -1,0 +1,15 @@
+dist
+.local
+.output.js
+node_modules
+
+**/*.svg
+**/*.sh
+
+public
+.npmrc
+
+.husky
+.vscode
+.github
+packages/mpvue-calendar
