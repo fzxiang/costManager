@@ -7,17 +7,13 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { type GetUserInfoModel, type LoginParams } from '/@/api/sys/model/userModel';
-import {
-  doLogout,
-  // getUserInfo,
-  loginApi,
-} from '/@/api/sys/user';
+import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
 import { usePermissionStore } from '/@/store/modules/permission';
-// import { RouteRecordRaw } from 'vue-router';
-// import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+import { type RouteRecordRaw } from 'vue-router';
+import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { isArray } from '/@/utils/is';
 import { h } from 'vue';
 
@@ -95,10 +91,10 @@ export const useUserStore = defineStore({
       try {
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginApi(loginParams, mode);
-        const { token } = data;
+        const { token_type, access_token } = data;
 
         // save token
-        this.setToken(token);
+        this.setToken(`${token_type} ${access_token}`);
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
@@ -115,33 +111,20 @@ export const useUserStore = defineStore({
       } else {
         const permissionStore = usePermissionStore();
         if (!permissionStore.isDynamicAddedRoute) {
-          await permissionStore.buildRoutesAction();
-          // router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
+          const routes = await permissionStore.buildRoutesAction();
+          routes.forEach((route) => {
+            router.addRoute(route as unknown as RouteRecordRaw);
+          });
+          router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
           permissionStore.setDynamicAddedRoute(true);
         }
         goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
       }
       return userInfo;
     },
-    // 用户账号密码登录后获取用户信息
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) return null;
-      const userInfo = {
-        userId: '1',
-        username: 'vben',
-        realName: '傅子湘',
-        avatar: '',
-        desc: 'manager',
-        password: '123456',
-        token: 'fakeToken1',
-        // homePath: '/dashboard/analysis',
-        roles: [
-          {
-            roleName: 'Super Admin',
-            value: 'super',
-          },
-        ],
-      };
+      const userInfo = await getUserInfo();
       const { roles = [] } = userInfo;
       if (isArray(roles)) {
         const roleList = roles.map((item) => item.value) as RoleEnum[];

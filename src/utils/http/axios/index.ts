@@ -1,7 +1,7 @@
 // axios配置  可自行根据项目进行更改，只需更改该文件即可，其他文件可以不动
 // The axios configuration can be changed according to the project, just change the file, other files can be left unchanged
 
-import type { AxiosResponse } from 'axios';
+import type { AxiosInstance, AxiosResponse } from 'axios';
 import { clone } from 'lodash-es';
 import type { RequestOptions, Result } from '/#/axios';
 import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform';
@@ -19,14 +19,10 @@ import { joinTimestamp, formatRequestDate } from './helper';
 import { useUserStoreWithOut } from '/@/store/modules/user';
 import { AxiosRetry } from '/@/utils/http/axios/axiosRetry';
 import axios from 'axios';
-import { createSessionStorage } from '/@/utils/cache';
-import { CURRENT_PROJECT_KEY } from '/@/enums/cacheEnum';
-import { useProjectStoreWithOut } from '/@/store/modules/project';
 
-const ls = createSessionStorage();
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
-const { createMessage, createErrorModal, createSuccessModal, notification } = useMessage();
+const { createMessage, createErrorModal, createSuccessModal } = useMessage();
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -55,10 +51,10 @@ const transform: AxiosTransform = {
       throw new Error(t('sys.api.apiRequestFailed'));
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code, data: result, msg: message, errors } = data;
+    const { errcode: code, data: result, message } = data;
 
     // 这里逻辑可以根据项目进行修改
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
+    const hasSuccess = data && code === ResultEnum.SUCCESS;
     if (hasSuccess) {
       let successMsg = message;
 
@@ -74,31 +70,15 @@ const transform: AxiosTransform = {
       return result;
     }
 
-    const userStore = useUserStoreWithOut();
-    const projectStore = useProjectStoreWithOut();
     // 在此处根据自己项目的实际情况对不同的code执行不同的操作
     // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
     let timeoutMsg = '';
     switch (code) {
       case ResultEnum.TIMEOUT:
         timeoutMsg = t('sys.api.timeoutMessage');
+        const userStore = useUserStoreWithOut();
         userStore.setToken(undefined);
         userStore.logout(true);
-        break;
-      case 105:
-        timeoutMsg = t('无操作权限，退出重登');
-        userStore.setToken(undefined);
-        userStore.logout(true);
-        break;
-      case 50:
-        userStore.setToken(undefined);
-        userStore.setSessionTimeout(false);
-        userStore.setUserInfo(null);
-        location.pathname = '/api/api/login';
-        break;
-      case 100001:
-        projectStore.resetState();
-        location.pathname = '/project/main';
         break;
       default:
         if (message) {
@@ -108,14 +88,10 @@ const transform: AxiosTransform = {
 
     // errorMessageMode='modal'的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
     // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
-    if (timeoutMsg !== '') {
-      if (options.errorMessageMode === 'modal') {
-        createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg });
-      } else if (options.errorMessageMode === 'message') {
-        createMessage.error(timeoutMsg);
-      } else {
-        notification.error({ message: timeoutMsg, description: errors.join() });
-      }
+    if (options.errorMessageMode === 'modal') {
+      createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg });
+    } else if (options.errorMessageMode === 'message') {
+      createMessage.error(timeoutMsg);
     }
 
     throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
@@ -186,13 +162,6 @@ const transform: AxiosTransform = {
         ? `${options.authenticationScheme} ${token}`
         : token;
     }
-
-    // 请求头添加常驻字段
-    const currentProject = ls.get(CURRENT_PROJECT_KEY);
-    if (currentProject && currentProject.id) {
-      config.headers.Game = currentProject.id;
-      config.headers.Platform = 1;
-    }
     return config;
   },
 
@@ -206,7 +175,7 @@ const transform: AxiosTransform = {
   /**
    * @description: 响应错误处理
    */
-  responseInterceptorsCatch: (axiosInstance, error: any) => {
+  responseInterceptorsCatch: (axiosInstance: AxiosInstance, error: any) => {
     const { t } = useI18n();
     const errorLogStore = useErrorLogStoreWithOut();
     errorLogStore.addAjaxErrorInfo(error);
@@ -284,7 +253,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           // 格式化提交参数时间
           formatDate: true,
           // 消息提示类型
-          errorMessageMode: 'notification',
+          errorMessageMode: 'message',
           // 接口地址
           apiUrl: globSetting.apiUrl,
           // 接口拼接地址
@@ -297,7 +266,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           withToken: true,
           retryRequest: {
             isOpenRetry: true,
-            count: 1,
+            count: 5,
             waitTime: 100,
           },
         },

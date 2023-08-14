@@ -16,7 +16,7 @@ const primaryColor = '#0960bd';
 // ! You need to clear the browser cache after the change
 const setting: ProjectConfig = {
   // Whether to show the configuration button
-  showSettingButton: false,
+  showSettingButton: true,
 
   // Whether to show the theme switch button
   showDarkModeToggle: true,
@@ -25,7 +25,7 @@ const setting: ProjectConfig = {
   settingButtonPosition: SettingButtonPositionEnum.AUTO,
 
   // Permission mode
-  permissionMode: PermissionModeEnum.BACK,
+  permissionMode: PermissionModeEnum.ROUTE_MAPPING,
 
   // Permission-related cache is stored in sessionStorage or localStorage
   permissionCacheType: CacheTypeEnum.LOCAL,
@@ -69,9 +69,9 @@ const setting: ProjectConfig = {
     // Whether to show the full screen button
     showFullScreen: true,
     // Whether to show the document button
-    showDoc: false,
+    showDoc: true,
     // Whether to show the notification button
-    showNotice: false,
+    showNotice: true,
     // Whether to display the menu search
     showSearch: true,
   },
@@ -100,11 +100,11 @@ const setting: ProjectConfig = {
     // Menu mode
     mode: MenuModeEnum.INLINE,
     // Menu type
-    type: MenuTypeEnum.MIX,
+    type: MenuTypeEnum.SIDEBAR,
     // Menu theme
     theme: ThemeEnum.DARK,
     // Split menu
-    split: true,
+    split: false,
     // Top menu layout
     topMenuAlign: 'center',
     // Fold trigger position

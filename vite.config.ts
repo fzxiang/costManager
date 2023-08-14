@@ -15,11 +15,10 @@ export default defineApplicationConfig({
       ],
     },
     server: {
-      port: 23081,
+      port: 2308,
       proxy: {
         '/api': {
-          target: 'http://pm-test.xmpaoyou.com/',
-          // target: 'http://10.130.0.36:8077',
+          target: 'http://127.0.0.1:4523/m1/3150146-0-default/',
           changeOrigin: true,
           ws: true,
           // rewrite: (path) => path.replace(new RegExp(`^/api`), ''),

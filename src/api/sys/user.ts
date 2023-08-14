@@ -7,8 +7,8 @@ enum Api {
   Logout = '/sso/logout',
   GetPermCode = '/organization/user/getUserFeatureInfo',
   // un-used
-  Login = '/login',
-  GetUserInfo = '/getUserInfo',
+  Login = '/user/login',
+  GetUserInfo = '/user/info',
   TestRetry = '/testRetry',
 }
 
@@ -30,8 +30,25 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
 /**
  * @description: getUserInfo
  */
-export function getUserInfo() {
-  return defHttp.get<GetUserInfoModel>({ url: Api.GetUserInfo }, { errorMessageMode: 'none' });
+export async function getUserInfo(): Promise<GetUserInfoModel> {
+  const res = await defHttp.get<{
+    name: string;
+    email: string;
+    avatar: string;
+    roles: Array<{
+      role_name: string;
+      value: string;
+    }>;
+  }>({ url: Api.GetUserInfo }, { errorMessageMode: 'none' });
+  return {
+    roles: res.roles.map((item) => {
+      return { roleName: item.role_name, value: item.value };
+    }),
+    userId: res.email,
+    username: res.name,
+    realName: res.name,
+    avatar: res.avatar,
+  };
 }
 
 export function getPermCode(params?) {

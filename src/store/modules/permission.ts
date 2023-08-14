@@ -1,6 +1,5 @@
 import type { AppRouteRecordRaw, Menu } from '/@/router/types';
-import type { RouteRecordRaw } from 'vue-router';
-import { router } from '/@/router';
+
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { useI18n } from '/@/hooks/web/useI18n';
@@ -9,22 +8,17 @@ import { useAppStoreWithOut } from './app';
 import { toRaw } from 'vue';
 import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
 import { transformRouteToMenu } from '/@/router/helper/menuHelper';
-import { RoleEnum } from '/@/enums/roleEnum';
 
 import projectSetting from '/@/settings/projectSetting';
 
 import { PermissionModeEnum } from '/@/enums/appEnum';
 
 import { asyncRoutes } from '/@/router/routes';
-import {
-  ERROR_LOG_ROUTE,
-  // PAGE_NOT_FOUND_ROUTE,
-  ENTRY_ROUTE,
-} from '/@/router/routes/basic';
+import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 import { filter } from '/@/utils/helper/treeHelper';
 
-// import { getMenuList } from '/@/api/sys/menu';
+import { getMenuList } from '/@/api/sys/menu';
 import { getPermCode } from '/@/api/sys/user';
 
 import { useMessage } from '/@/hooks/web/useMessage';
@@ -61,6 +55,7 @@ export const usePermissionStore = defineStore({
     // Backstage menu list
     // 后台菜单列表
     backMenuList: [],
+    // menu List
     // 菜单列表
     frontMenuList: [],
   }),
@@ -108,8 +103,8 @@ export const usePermissionStore = defineStore({
       this.backMenuList = [];
       this.lastBuildMenuTime = 0;
     },
-    async changePermissionCode(params?) {
-      const codeList = await getPermCode(params);
+    async changePermissionCode() {
+      const codeList = await getPermCode();
       this.setPermCodeList(codeList);
     },
 
@@ -226,12 +221,8 @@ export const usePermissionStore = defineStore({
           // 这个功能可能只需要执行一次，实际项目可以自己放在合适的时间
           let routeList: AppRouteRecordRaw[] = [];
           try {
-            // 这里暂时对业务需求处理：针对角色过滤系统设置第一层路由
-            if (roleList.includes(RoleEnum.SUPER)) {
-              routeList = ENTRY_ROUTE;
-            } else {
-              routeList = ENTRY_ROUTE.filter((item) => item.name !== 'System');
-            }
+            await this.changePermissionCode();
+            routeList = (await getMenuList()) as AppRouteRecordRaw[];
           } catch (error) {
             console.error(error);
           }
@@ -251,19 +242,12 @@ export const usePermissionStore = defineStore({
           routeList = routeList.filter(routeRemoveIgnoreFilter);
 
           routeList = flatMultiLevelRoutes(routeList);
-          // routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
-          routes = routeList;
+          routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
           break;
       }
 
       routes.push(ERROR_LOG_ROUTE);
       patchHomeAffix(routes);
-      for (const i in routes) {
-        if (Object.prototype.hasOwnProperty.call(routes, i)) {
-          const route = routes[i];
-          router.addRoute(route as unknown as RouteRecordRaw);
-        }
-      }
       return routes;
     },
   },

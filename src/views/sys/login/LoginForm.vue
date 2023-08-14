@@ -8,10 +8,10 @@
     ref="formRef"
     v-show="getShow"
     style="margin-top: 20px"
-    @keypress.enter="handleLogin"
+    @keypress.enter="onClickSSO"
   >
     <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
-      <Button block size="large" shape="round" @click="handerLogin">
+      <Button block size="large" shape="round" @click="onClickSSO">
         <Space>
           <SvgIcon name="work-wechat" />
           <span> 企业微信SSO登录 </span>
@@ -26,7 +26,7 @@
   </Form>
 </template>
 <script lang="ts" setup>
-  import { reactive, ref, unref, computed } from 'vue';
+  import { reactive, ref, unref, computed, onMounted } from 'vue';
 
   import { Form, Button, Space } from 'ant-design-vue';
   // import {
@@ -45,9 +45,14 @@
   import { useMessage } from '/@/hooks/web/useMessage';
 
   import { useUserStore } from '/@/store/modules/user';
-  import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
+  import {
+    LoginStateEnum,
+    useLoginState,
+    useFormRules,
+    // useFormValid
+  } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
-  //import { onKeyStroke } from '@vueuse/core';
+  import { onKeyStroke } from '@vueuse/core';
 
   const { t } = useI18n();
   const { notification, createErrorModal } = useMessage();
@@ -65,20 +70,45 @@
     password: '',
   });
 
-  const { validForm } = useFormValid(formRef);
+  // const { validForm } = useFormValid(formRef);
 
-  //onKeyStroke('Enter', handleLogin);
+  onKeyStroke('Enter', onClickSSO);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
 
-  async function handleLogin() {
-    const data = await validForm();
-    if (!data) return;
+  // async function handleLoginForm() {
+  //   const data = await validForm();
+  //   if (!data) return;
+  //   try {
+  //     loading.value = true;
+  //     const userInfo = await userStore.login({
+  //       password: data.password,
+  //       username: data.account,
+  //       mode: 'none', //不要默认的错误提示
+  //     });
+  //     if (userInfo) {
+  //       notification.success({
+  //         message: t('sys.login.loginSuccessTitle'),
+  //         description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realName}`,
+  //         duration: 3,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     createErrorModal({
+  //       title: t('sys.api.errorTip'),
+  //       content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
+  //       getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
+  //     });
+  //   } finally {
+  //     loading.value = false;
+  //   }
+  // }
+
+  async function handleLoginSSO(parmas) {
     try {
       loading.value = true;
       const userInfo = await userStore.login({
-        password: data.password,
-        username: data.account,
+        ...parmas,
         mode: 'none', //不要默认的错误提示
       });
       if (userInfo) {
@@ -99,12 +129,20 @@
     }
   }
 
-  let win = ref();
-  function handerLogin() {
-    const url = new URL(location.origin);
-    url.pathname = '/api/api/login';
-    url.searchParams.set('back_url', location.origin + '/');
+  function onClickSSO() {
+    const url = new URL(import.meta.env.VITE_SSO_LOGIN_URL);
+    url.pathname = '/login';
+    url.searchParams.set('service', location.origin);
+    url.searchParams.set('url', location.origin);
     location.href = url.href;
   }
-  console.log(win);
+
+  // 企业微信SSO登录
+  onMounted(() => {
+    const url = new URL(location.href);
+    const ticket = url.searchParams.has('ticket');
+    if (ticket) {
+      handleLoginSSO({ ticket });
+    }
+  });
 </script>

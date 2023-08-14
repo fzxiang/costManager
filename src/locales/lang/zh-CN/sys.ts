@@ -67,8 +67,8 @@ export default {
     signUpFormTitle: '注册',
     forgetFormTitle: '重置密码',
 
-    signInTitle: '泡游网络项目管理系统',
-    signInDesc: '项目进度统计和实时汇报！',
+    signInTitle: '泡游网络成本管理系统',
+    signInDesc: 'CBMS',
     policy: '我同意xxx隐私政策',
     scanSign: `扫码后点击"确认"，即可完成登录`,
 

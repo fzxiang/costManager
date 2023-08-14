@@ -37,10 +37,9 @@ export interface RetryRequest {
 }
 export interface Result<T = any> {
   // type: 'success' | 'error' | 'warning';
-  code: number;
-  msg: string;
+  errcode: number;
+  message: string;
   data: T;
-  errors: [];
 }
 
 // multipart/form-data: upload file

@@ -1,4 +1,4 @@
-import type { Router } from 'vue-router';
+import type { Router, RouteRecordRaw } from 'vue-router';
 
 import { usePermissionStoreWithOut } from '/@/store/modules/permission';
 
@@ -8,8 +8,6 @@ import { useUserStoreWithOut } from '/@/store/modules/user';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 import { RootRoute } from '/@/router/routes';
-
-import { type RoleEnum } from '/@/enums/roleEnum';
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN;
 
@@ -59,49 +57,18 @@ export function createPermissionGuard(router: Router) {
       }
 
       // redirect login page
-      // const redirectData: { path: string; replace: boolean; query?: Recordable<string> } = {
-      //   path: LOGIN_PATH,
-      //   replace: true,
-      // };
-      // if (to.path) {
-      //   redirectData.query = {
-      //     ...redirectData.query,
-      //     redirect: to.path,
-      //   };
-      // }
-      // next(redirectData);
-
-      // 只使用单点登录
-      const url = new URL(location.href);
-      if (url.searchParams.get('token')) {
-        const token = url.searchParams.get('token') || undefined;
-        userStore.setToken(token);
-
-        const roles = [
-          {
-            roleName: url.searchParams.get('is_admin') === '1' ? '超级管理员' : '普通用户',
-            value: url.searchParams.get('is_admin') === '1' ? 'super' : 'user',
-          },
-        ];
-        userStore.setUserInfo({
-          userId: '1',
-          username: url.searchParams.get('user_name') || '',
-          realName: url.searchParams.get('real_name') || '',
-          avatar: url.searchParams.get('avatar') || '',
-          desc: 'none description',
-          roles: roles,
-        });
-        const roleList = roles.map((item) => item.value) as RoleEnum[];
-        userStore.setRoleList(roleList);
-        next({ path: to.path });
+      const redirectData: { path: string; replace: boolean; query?: Recordable<string> } = {
+        path: LOGIN_PATH,
+        replace: true,
+      };
+      if (to.path) {
+        redirectData.query = {
+          ...to.query,
+          redirect: to.path,
+        };
       }
-      // else {
-      //   userStore.setToken(undefined);
-      //   userStore.setSessionTimeout(false);
-      //   userStore.setUserInfo(null);
-      //   location.href = location.origin + '/api/api/login';
-      // }
-      // return;
+      next(redirectData);
+      return;
     }
 
     // Jump to the 404 page after processing the login
@@ -115,23 +82,27 @@ export function createPermissionGuard(router: Router) {
     }
 
     // get userinfo while last fetch time is empty
-    // if (userStore.getLastUpdateTime === 0) {
-    //   try {
-    //     await userStore.getUserInfoAction();
-    //   } catch (err) {
-    //     next();
-    //     return;
-    //   }
-    // }
+    if (userStore.getLastUpdateTime === 0) {
+      try {
+        await userStore.getUserInfoAction();
+      } catch (err) {
+        next();
+        return;
+      }
+    }
 
     if (permissionStore.getIsDynamicAddedRoute) {
       next();
       return;
     }
 
-    await permissionStore.buildRoutesAction();
+    const routes = await permissionStore.buildRoutesAction();
 
-    // router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
+    routes.forEach((route) => {
+      router.addRoute(route as unknown as RouteRecordRaw);
+    });
+
+    router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
 
     permissionStore.setDynamicAddedRoute(true);
 
