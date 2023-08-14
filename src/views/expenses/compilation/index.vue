@@ -1,10 +1,5 @@
 <template>
-  <PageWrapper
-    title="VxeTable表格"
-    content="只展示部分操作，详细功能请查看VxeTable官网事例"
-    contentFullHeight
-    fixedHeight
-  >
+  <PageWrapper contentFullHeight fixedHeight>
     <VxeBasicTable ref="tableRef" v-bind="gridOptions">
       <template #action="{ row }">
         <TableAction outside :actions="createActions(row)" />
@@ -23,6 +18,7 @@
     VxeBasicTable,
     type VxeGridInstance,
   } from '/@/components/VxeTable';
+  import { getListApi } from '/@/api/expenses/compilation';
   // import { demoListApi } from '/@/api/demo/table';
 
   const { createMessage } = useMessage();
@@ -37,7 +33,7 @@
     toolbarConfig: {
       buttons: [
         {
-          content: '在第一行新增',
+          content: '导入文档',
           buttonRender: {
             name: 'AButton',
             props: {
@@ -53,7 +49,7 @@
           },
         },
         {
-          content: '在最后一行新增',
+          content: '导出文档',
           buttonRender: {
             name: 'AButton',
             props: {
@@ -76,20 +72,15 @@
     proxyConfig: {
       ajax: {
         query: async ({ page, form }) => {
-          console.log(page, form);
-          return [];
-
-          // return demoListApi({
-          //   pageNum: page.currentPage,
-          //   pageSize: page.pageSize,
-          //   ...form,
-          // });
+          return getListApi({
+            page: page.currentPage,
+            page_size: page.pageSize,
+            ...form,
+          });
         },
-        queryAll: async ({ form }) => {
-          console.log(form);
-          return [];
-          // return await demoListApi(form);
-        },
+        // queryAll: async ({ form }) => {
+        //   return await getListApi(form);
+        // },
       },
     },
   });

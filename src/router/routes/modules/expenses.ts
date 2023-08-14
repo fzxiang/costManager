@@ -6,7 +6,7 @@ const comp: AppRouteModule = {
   path: '/expenses',
   name: 'Expenses',
   component: LAYOUT,
-  redirect: '/expenses/person',
+  redirect: '/expenses/compilation',
   meta: {
     orderNo: 30,
     icon: 'ion:layers-outline',
@@ -14,12 +14,20 @@ const comp: AppRouteModule = {
   },
 
   children: [
+    // {
+    //   path: 'person',
+    //   name: 'ExpensesMember',
+    //   component: () => import('/@/views/expenses/person/index.vue'),
+    //   meta: {
+    //     title: '人员人工成本',
+    //   },
+    // },
     {
-      path: 'person',
-      name: 'ExpensesMember',
-      component: () => import('/@/views/expenses/person/index.vue'),
+      path: 'compilation',
+      name: 'ExpensesCompilation',
+      component: () => import('/@/views/expenses/compilation/index.vue'),
       meta: {
-        title: '人员人工成本',
+        title: '编制表',
       },
     },
     {

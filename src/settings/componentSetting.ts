@@ -67,10 +67,10 @@ export default {
     grid: {
       toolbarConfig: {
         enabled: true,
-        export: true,
-        zoom: true,
-        print: true,
-        refresh: true,
+        export: false,
+        zoom: false,
+        print: false,
+        refresh: false,
         custom: true,
       },
       pagerConfig: {
