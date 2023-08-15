@@ -35,6 +35,15 @@ export const vxeTableColumns: VxeGridPropTypes.Columns = [
     align: 'center',
     minWidth: 150,
     showOverflow: 'tooltip',
+    editRender: {
+      name: 'AInputNumber',
+      props: {
+        min: 0,
+        attrs: {
+          placeholder: '请输入编制人数',
+        },
+      },
+    },
   },
   {
     minWidth: 160,

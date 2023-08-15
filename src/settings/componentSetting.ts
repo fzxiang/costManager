@@ -91,7 +91,7 @@ export default {
       proxyConfig: {
         form: true,
         props: {
-          result: 'list',
+          list: 'list',
           total: 'count',
         },
       },

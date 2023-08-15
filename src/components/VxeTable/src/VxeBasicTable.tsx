@@ -12,7 +12,7 @@ import type {
   TableEditMethods,
   TableValidatorMethods,
 } from 'vxe-table';
-import { Grid as VxeGrid } from 'vxe-table';
+import { Grid as VxeGrid } from '../';
 
 import { extendSlots } from '/@/utils/helper/tsxHelper';
 import { gridComponentMethodKeys } from './methods';
