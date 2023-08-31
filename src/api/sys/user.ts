@@ -36,18 +36,20 @@ export async function getUserInfo(): Promise<GetUserInfoModel> {
     email: string;
     avatar: string;
     roles: Array<{
-      role_name: string;
-      value: string;
+      id: string;
+      name: string;
     }>;
+    menu: any;
   }>({ url: Api.GetUserInfo }, { errorMessageMode: 'none' });
   return {
     roles: res.roles.map((item) => {
-      return { roleName: item.role_name, value: item.value };
+      return { roleName: item.name, value: item.id };
     }),
     userId: res.email,
     username: res.name,
     realName: res.name,
     avatar: res.avatar,
+    menu: res.menu,
   };
 }
 
