@@ -198,7 +198,7 @@
           item.status = UploadResultStatus.SUCCESS;
           item.responseData = data;
           console.log(data);
-          if (data.code === 0) {
+          if (data.errcode === 0) {
             return {
               success: true,
               error: null,

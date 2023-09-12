@@ -142,7 +142,7 @@
     const url = new URL(location.href);
     const ticket = url.searchParams.has('ticket');
     if (ticket) {
-      handleLoginSSO({ ticket });
+      handleLoginSSO({ ticket: url.searchParams.get('ticket') });
     }
   });
 </script>

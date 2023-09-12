@@ -4,10 +4,10 @@ import { type UploadFileParams } from '/#/axios';
 import { downloadByUrl } from '/@/utils/file/download';
 
 enum Api {
-  LIST = '/compilation/list',
-  Upload = '/compilation/upload',
-  Download = '/compilation/download',
-  Update = '/compilation/update',
+  LIST = '/compilation',
+  Upload = '/compilation/import',
+  Download = '/compilation/export',
+  Update = '/compilation',
 }
 
 /**
@@ -40,17 +40,18 @@ export function uploadApi(params: UploadFileParams, onUploadProgress) {
 
 // 下载文件
 export async function downloadApi(): Promise<void> {
-  const res = await defHttp.get<{ url: string }>({
+  const res = await defHttp.post<{ file: string; name: string }>({
     url: Api.Download,
   });
 
   downloadByUrl({
-    url: res.url,
+    fileName: res.name,
+    url: res.file,
     target: '_self',
   });
 }
 
 // 修改
 export function updateApi(params: { num: number; id: number }) {
-  return defHttp.post({ url: Api.Update, params });
+  return defHttp.put({ url: Api.Update + '/' + params.id, params });
 }

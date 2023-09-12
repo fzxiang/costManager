@@ -24,7 +24,7 @@ export const vxeTableColumns: VxeGridPropTypes.Columns = [
   },
   {
     title: '岗位',
-    field: 'job',
+    field: 'post',
     align: 'center',
     minWidth: 150,
     showOverflow: 'tooltip',
