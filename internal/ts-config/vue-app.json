@@ -5,6 +5,7 @@
   "compilerOptions": {
     "jsx": "preserve",
     "lib": ["ESNext", "DOM"],
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "declaration": false
   }
 }

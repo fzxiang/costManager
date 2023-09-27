@@ -71,19 +71,19 @@
 </template>
 <script lang="ts" setup>
   import type { Ref } from 'vue';
+  import { computed, inject, nextTick, onMounted, ref } from 'vue';
   import type { VxeGridInstance } from '/@/components/VxeTable';
-  import { ref, computed, nextTick, onMounted, inject } from 'vue';
   import type { SelectProps } from 'ant-design-vue';
   import { InputNumber, Select } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { get } from 'lodash-es';
 
-  import type { List, DetailList, Employee } from '/@/api/expenses/project';
+  import type { DetailList, Employee, List } from '/@/api/expenses/project';
   import {
-    updateApi,
     detailApi,
     getEmployeeApi,
     getEmployeeBudgetApi,
+    updateApi,
   } from '/@/api/expenses/project';
 
   const tableRef = inject<Ref<VxeGridInstance>>('tableRef');
@@ -123,8 +123,7 @@
   const employees = ref<Recordable<string[]>>();
 
   onMounted(async () => {
-    const res = await getEmployeeApi({ project_id: project_id.value });
-    employees.value = res;
+    employees.value = await getEmployeeApi({ project_id: project_id.value });
   });
 
   function getOptions(name, existName): SelectProps['options'] {
@@ -183,19 +182,21 @@
     border-top: 1px solid #e8e8e8;
     border-left: 1px solid #e8e8e8;
   }
-  .border-td {
-    border-right: 1px solid #e8e8e8;
-    border-bottom: 1px solid #e8e8e8;
-    padding: 8px;
-    line-height: 31px;
-    text-align: center;
-  }
+
   .border-th {
     border-right: 1px solid #e8e8e8;
     border-bottom: 1px solid #e8e8e8;
-    line-height: 40px;
-    font-weight: bold;
     background-color: #f3f3f3;
+    font-weight: bold;
+    line-height: 40px;
+    text-align: center;
+  }
+
+  .border-td {
+    padding: 8px;
+    border-right: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+    line-height: 31px;
     text-align: center;
   }
 </style>

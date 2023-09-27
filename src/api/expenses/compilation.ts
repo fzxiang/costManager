@@ -1,7 +1,7 @@
 import { defHttp } from '/@/utils/http/axios';
 import { type BasicPageParams, type BasicFetchResult } from '/@/api/model/baseModel';
 import { type UploadFileParams } from '/#/axios';
-import { downloadByUrl } from '/@/utils/file/download';
+import { downloadByBase64 } from '/@/utils/file/download';
 
 enum Api {
   LIST = '/compilation',
@@ -44,11 +44,7 @@ export async function downloadApi(): Promise<void> {
     url: Api.Download,
   });
 
-  downloadByUrl({
-    fileName: res.name,
-    url: res.file,
-    target: '_self',
-  });
+  downloadByBase64(res.file, res.name);
 }
 
 // 修改

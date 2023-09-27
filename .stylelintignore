@@ -15,3 +15,5 @@ dist
 .local
 /bin
 Dockerfile
+
+src/components/VxeTable
