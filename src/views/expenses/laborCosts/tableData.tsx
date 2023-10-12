@@ -1,56 +1,26 @@
 import { type VxeFormItemProps, type VxeGridPropTypes } from '/@/components/VxeTable';
 
 export const vxeTableColumns: VxeGridPropTypes.Columns = [
-  // {
-  //   title: '序号',
-  //   type: 'seq',
-  //   fixed: 'left',
-  //   width: '50',
-  //   align: 'center',
-  // },
   {
-    title: '中心',
-    field: 'center',
+    title: '月份',
+    field: 'date',
     align: 'center',
     minWidth: 150,
     showOverflow: 'tooltip',
   },
   {
-    title: '部门',
-    field: 'department',
+    title: '合计人工成本',
+    field: 'cost',
     align: 'center',
     minWidth: 150,
     showOverflow: 'tooltip',
   },
   {
-    title: '岗位',
-    field: 'post',
+    title: '合计工时',
+    field: 'hour',
     align: 'center',
     minWidth: 150,
     showOverflow: 'tooltip',
-  },
-  {
-    title: '编制人数',
-    field: 'num',
-    align: 'center',
-    minWidth: 150,
-    showOverflow: 'tooltip',
-    editRender: {
-      name: 'AInputNumber',
-      props: {
-        min: 0,
-        attrs: {
-          placeholder: '请输入编制人数',
-        },
-      },
-    },
-  },
-  {
-    minWidth: 160,
-    title: '操作',
-    align: 'center',
-    slots: { default: 'action' },
-    fixed: 'right',
   },
 ];
 

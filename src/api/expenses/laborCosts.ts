@@ -3,10 +3,8 @@ import { type BasicPageParams, type BasicFetchResult } from '/@/api/model/baseMo
 import { type UploadFileParams } from '/#/axios';
 
 enum Api {
-  LIST = '/laborCosts',
-  Upload = '/laborCosts/import',
-  Download = '/laborCosts/export',
-  Update = '/laborCosts',
+  LIST = '/cost',
+  Upload = '/cost/import',
 }
 
 /**
