@@ -31,13 +31,10 @@ export const vxeTableFormSchema: VxeFormItemProps[] = [
     itemRender: {
       name: 'ASelect',
       props: {
-        options: [
-          { label: '2020年', value: '2020' },
-          { label: '2021年', value: '2021' },
-          { label: '2022年', value: '2022' },
-          { label: '2023年', value: '2023' },
-          { label: '2024年', value: '2024' },
-        ],
+        options: ['', '', '', '', ''].map((item, index) => {
+          const year = new Date().getFullYear() - index;
+          return { label: year + '年', value: year };
+        }),
       },
       defaultValue: '2023',
     },
