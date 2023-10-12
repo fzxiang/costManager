@@ -107,7 +107,7 @@
       });
       /**
        * click menu
-       * @param menu
+       * @param path
        */
 
       function handleMenuClick(path: string) {
@@ -116,7 +116,7 @@
 
       /**
        * before click menu
-       * @param menu
+       * @param path
        */
       async function beforeMenuClickFn(path: string) {
         if (!isUrl(path)) {

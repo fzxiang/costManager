@@ -34,10 +34,6 @@ export const createStorage = ({
     private prefixKey?: string;
     private encryption: AesEncryption;
     private hasEncrypt: boolean;
-    /**
-     *
-     * @param {*} storage
-     */
     constructor() {
       this.storage = storage;
       this.prefixKey = prefixKey;

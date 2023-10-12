@@ -96,7 +96,7 @@
       );
 
       watchEffect(() => {
-        state.isPassing = !!props.value;
+        state.isPassing = props.value;
       });
 
       function getEventPageX(e: MouseEvent | TouchEvent) {
@@ -313,8 +313,7 @@
       position: absolute;
       top: 0;
       animation: slidetounlock 3s infinite;
-      background-clip: text;
-      background-color: -webkit-gradient(
+      background: -webkit-gradient(
         linear,
         left top,
         right top,
@@ -324,6 +323,7 @@
         color-stop(0.6, #333),
         color-stop(1, #333)
       );
+      background-clip: text;
       font-size: 12px;
       user-select: none;
       text-size-adjust: none;

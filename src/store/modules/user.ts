@@ -150,7 +150,7 @@ export const useUserStore = defineStore({
       this.setToken(undefined);
       this.setSessionTimeout(false);
       this.setUserInfo(null);
-      goLogin && router.push(PageEnum.BASE_LOGIN);
+      goLogin && (await router.push(PageEnum.BASE_LOGIN));
     },
 
     /**

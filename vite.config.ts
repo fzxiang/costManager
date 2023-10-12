@@ -18,7 +18,7 @@ export default defineApplicationConfig({
       port: 2308,
       proxy: {
         '/api': {
-          target: 'http://127.0.0.1:4523/m1/3150146-0-default/',
+          target: 'http://dev.cost-management.paoyou.work/',
           changeOrigin: true,
           ws: true,
           // rewrite: (path) => path.replace(new RegExp(`^/api`), ''),

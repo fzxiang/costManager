@@ -113,7 +113,7 @@
 
   onMounted(async () => {
     await nextTick();
-    init();
+    await init();
     useWindowSizeFn(debounceRefresh);
   });
 

@@ -137,13 +137,13 @@
         const path =
           (route || unref(currentRoute)).meta?.currentActiveMenu ||
           (route || unref(currentRoute)).path;
-        setOpenKeys(path);
+        await setOpenKeys(path);
         if (unref(currentActiveMenu)) return;
         if (props.isHorizontal && unref(getSplit)) {
           const parentPath = await getCurrentParentPath(path);
           menuState.selectedKeys = [parentPath];
         } else {
-          const parentPaths = await getAllParentPath(props.items, path);
+          const parentPaths = getAllParentPath(props.items, path);
           menuState.selectedKeys = parentPaths;
         }
       }

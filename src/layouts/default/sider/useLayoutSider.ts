@@ -62,6 +62,7 @@ export function useTrigger(getIsMobile: Ref<boolean>) {
  * Handle menu drag and drop related operations
  * @param siderRef
  * @param dragBarRef
+ * @param mix
  */
 export function useDragLine(siderRef: Ref<any>, dragBarRef: Ref<any>, mix = false) {
   const { getMiniWidthNumber, getCollapsed, setMenuSetting } = useMenuSetting();

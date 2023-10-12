@@ -1,5 +1,5 @@
 import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table';
-import type { PaginationProps } from '../types/pagination';
+import type { PaginationProps } from '@/components/Table';
 import type { ComputedRef } from 'vue';
 import { computed, type Ref, ref, reactive, toRaw, unref, watch } from 'vue';
 import { renderEditCell } from '../components/editable';
@@ -24,7 +24,7 @@ function handleItem(item: BasicColumn, ellipsis: boolean) {
     }
   }
   if (children && children.length) {
-    handleChildren(children, !!ellipsis);
+    handleChildren(children, ellipsis);
   }
 }
 

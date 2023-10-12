@@ -357,22 +357,22 @@
               class={`${prefixCls}__controller-item`}
               onClick={() => scaleFunc(-getScaleStep.value)}
             >
-              <img src={unScaleSvg} />
+              <img src={unScaleSvg} alt="" />
             </div>
             <div
               class={`${prefixCls}__controller-item`}
               onClick={() => scaleFunc(getScaleStep.value)}
             >
-              <img src={scaleSvg} />
+              <img src={scaleSvg} alt="" />
             </div>
             <div class={`${prefixCls}__controller-item`} onClick={resume}>
-              <img src={resumeSvg} />
+              <img src={resumeSvg} alt="" />
             </div>
             <div class={`${prefixCls}__controller-item`} onClick={() => rotateFunc(-90)}>
-              <img src={unRotateSvg} />
+              <img src={unRotateSvg} alt="" />
             </div>
             <div class={`${prefixCls}__controller-item`} onClick={() => rotateFunc(90)}>
-              <img src={rotateSvg} />
+              <img src={rotateSvg} alt="" />
             </div>
           </div>
         );
@@ -418,6 +418,7 @@
                   ref={imgElRef}
                   src={imgState.currentUrl}
                   onMousedown={handleAddMoveListener}
+                  alt=""
                 />
                 {renderClose()}
                 {renderIndex()}

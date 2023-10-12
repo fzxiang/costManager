@@ -65,7 +65,6 @@ function getModelEvent(renderOpts: VxeGlobalRendererHandles.RenderOptions) {
 
 /**
  * @description: chang值改变方法
- * @param {}
  * @return {*}
  * @author: *
  */
@@ -78,9 +77,49 @@ function getClickEvent() {
 }
 /**
  * @description: 获取方法
- * @param {}
- * @return {*}
- * @author: *
+ * @param inputFunc
+ * @param changeFunc
+ * @param clickFunc
+ * @param renderOpts
+ * @param params
+ * @param inputFunc
+ * @param changeFunc
+ * @param clickFunc
+ * @param renderOpts
+ * @param params
+ * @param inputFunc
+ * @param changeFunc
+ * @param clickFunc
+ * @param renderOpts
+ * @param params
+ * @param inputFunc
+ * @param changeFunc
+ * @param clickFunc
+ * @param renderOpts
+ * @param params
+ * @param inputFunc
+ * @param changeFunc
+ * @param clickFunc
+ * @param renderOpts
+ * @param params
+ * @param inputFunc
+ * @param changeFunc
+ * @param clickFunc
+ * @param renderOpts
+ * @param params
+ * @param inputFunc
+ * @param changeFunc
+ * @param clickFunc
+ * @param renderOpts
+ * @param params
+ * @param inputFunc
+ * @param changeFunc
+ * @param clickFunc
+ * @param renderOpts
+ * @param params
+ * @param inputFunc
+ * @param changeFunc
+ * @param clickFunc
  */
 export function createEvents(
   renderOpts: VxeGlobalRendererHandles.RenderOptions,
@@ -281,7 +320,6 @@ export function createFilterRender(
 
 /**
  * @description: 默认过滤
- * @param {}
  * @return {*}
  * @author: *
  */
@@ -380,9 +418,13 @@ export function createCellRender(
 
 /**
  * @description: 创建 导出渲染
- * @param {}
- * @return {*}
- * @author: *
+ * @param callBack
+ * @param getExportCellValue
+ * @param callBack
+ * @param getExportCellValue
+ * @param callBack
+ * @param getExportCellValue
+ * @param callBack
  */
 export function createExportMethod(
   getExportCellValue: Function,

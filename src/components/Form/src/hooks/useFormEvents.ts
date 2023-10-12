@@ -91,10 +91,10 @@ export function useFormEvents({
       const defaultValue = cloneDeep(defaultValueRef.value[key]);
       formModel[key] = isInput ? defaultValue || '' : defaultValue;
     });
-    nextTick(() => clearValidate());
+    await nextTick(() => clearValidate());
 
     emit('reset', toRaw(formModel));
-    submitOnReset && handleSubmit();
+    submitOnReset && (await handleSubmit());
   }
 
   /**

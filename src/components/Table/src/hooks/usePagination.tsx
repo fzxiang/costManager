@@ -1,4 +1,4 @@
-import type { PaginationProps } from '../types/pagination';
+import type { PaginationProps } from '@/components/Table';
 import type { BasicTableProps } from '../types/table';
 import { computed, unref, ref, type ComputedRef, watch } from 'vue';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons-vue';

@@ -40,7 +40,6 @@ export function usePermission() {
   /**
    * Reset and regain authority resource information
    * 重置和重新获得权限资源信息
-   * @param id
    */
   async function resume() {
     const tabStore = useMultipleTabStore();
@@ -48,7 +47,7 @@ export function usePermission() {
     resetRouter();
     await permissionStore.buildRoutesAction();
     permissionStore.setLastBuildMenuTime();
-    closeAll();
+    await closeAll();
   }
 
   /**
@@ -101,7 +100,7 @@ export function usePermission() {
    * refresh menu data
    */
   async function refreshMenu() {
-    resume();
+    await resume();
   }
 
   return { changeRole, hasPermission, togglePermissionMode, refreshMenu };

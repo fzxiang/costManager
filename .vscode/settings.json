@@ -157,7 +157,6 @@
       "priority": 4
     }
   ],
-  // 控制相关文件嵌套展示
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {

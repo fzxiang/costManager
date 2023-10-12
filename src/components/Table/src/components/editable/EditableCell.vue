@@ -200,7 +200,7 @@
           value: unref(currentValueRef),
           record: toRaw(props.record),
         });
-        handleSubmitRule();
+        await handleSubmitRule();
       }
 
       async function handleSubmitRule() {
@@ -287,7 +287,7 @@
         if (props.column?.editRow) {
           return;
         }
-        handleSubmit();
+        await handleSubmit();
       }
 
       function handleSubmitClick() {

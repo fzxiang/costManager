@@ -18,7 +18,7 @@
   import { h } from 'vue';
   import { Tag } from 'ant-design-vue';
   import { PageWrapper } from '/@/components/Page';
-  import { Description, type DescItem, useDescription } from '/@/components/Description/index';
+  import { Description, type DescItem, useDescription } from '@/components/Description';
   import { GITHUB_URL, SITE_URL, DOC_URL } from '/@/settings/siteSetting';
 
   const { pkg, lastBuildTime } = __APP_INFO__;

@@ -1,5 +1,5 @@
 import type { BasicTableProps, FetchParams, SorterResult } from '../types/table';
-import type { PaginationProps } from '../types/pagination';
+import type { PaginationProps } from '@/components/Table';
 import {
   ref,
   unref,
@@ -348,7 +348,7 @@ export function useDataSource(
     }
   }
 
-  function setTableData<T = Recordable>(values: T[]) {
+  function setTableData(values: Recordable[]) {
     dataSourceRef.value = values;
   }
 

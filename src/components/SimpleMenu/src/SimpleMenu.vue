@@ -134,7 +134,7 @@
 
         menuState.activeName = path;
 
-        setOpenKeys(path);
+        await setOpenKeys(path);
       }
 
       async function handleSelect(key: string) {
@@ -151,7 +151,7 @@
         emit('menuClick', key);
 
         isClickGo.value = true;
-        setOpenKeys(key);
+        await setOpenKeys(key);
         menuState.activeName = key;
       }
 

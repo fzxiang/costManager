@@ -113,7 +113,7 @@
       date.value = record.date;
       const { list } = await detailApi({ project_id: project_id.value, date: date.value });
       detailList.value = list;
-      nextTick(() => {
+      await nextTick(() => {
         changeLoading(false);
       });
     },
@@ -126,7 +126,7 @@
     employees.value = await getEmployeeApi({ project_id: project_id.value });
   });
 
-  function getOptions(name, existName): SelectProps['options'] {
+  function getOptions(name: string, existName: DetailList['employees']): SelectProps['options'] {
     if (!employees.value) return undefined;
     const sel = employees.value[name];
     const exist = existName.map((item) => item.name);

@@ -1,5 +1,5 @@
 import { Tag } from 'ant-design-vue';
-import { type BasicColumn } from '/@/components/Table/index';
+import { type BasicColumn } from '@/components/Table';
 import { ErrorTypeEnum } from '/@/enums/exceptionEnum';
 import { useI18n } from '/@/hooks/web/useI18n';
 

@@ -13,7 +13,6 @@
   --important: var(--string);
 
   position: relative;
-  height: auto;
   height: 100%;
   overflow: hidden;
   font-family: var(--font-code);
@@ -67,7 +66,7 @@
 /* FOLD GUTTER */
 
 .CodeMirror-foldmarker {
-  font-family: arial;
+  font-family: arial, serif;
   line-height: 0.3;
   color: #414141;
   text-shadow: #f96 1px 1px 2px, #f96 -1px -1px 2px, #f96 1px -1px 2px, #f96 -1px 1px 2px;
@@ -498,7 +497,6 @@ div.CodeMirror-dragcursors {
 }
 
 .cm-searching {
-  background-color: #ffa;
   background-color: rgb(255 255 0 / 40%);
 }
 

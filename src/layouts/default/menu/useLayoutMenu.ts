@@ -44,7 +44,7 @@ export function useSplitMenu(splitType: Ref<MenuSplitTyeEnum>) {
       if (!parentPath) {
         parentPath = await getCurrentParentPath(currentActiveMenu);
       }
-      parentPath && throttleHandleSplitLeftMenu(parentPath);
+      parentPath && (await throttleHandleSplitLeftMenu(parentPath));
     },
     {
       immediate: true,

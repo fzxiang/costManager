@@ -71,7 +71,7 @@ async function createAppConfigPlugin({
 
 /**
  * Get the configuration file variable name
- * @param env
+ * @param title
  */
 const getVariableName = (title: string) => {
   return `__PRODUCTION__${title || '__APP'}__CONF__`.toUpperCase().replace(/\s/g, '');

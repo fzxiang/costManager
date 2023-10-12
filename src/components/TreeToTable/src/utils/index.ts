@@ -48,6 +48,7 @@ export function getTreeMaxLevel(tree) {
 /**
  * 递归设置树结构展开收起状态
  * @param {Array} tree
+ * @param foldNum
  * @return {null}
  */
 export function setTreeFoldStatus(tree, foldNum) {
@@ -91,8 +92,8 @@ export function setTreeFold(tree, node, foldNum) {
 
 /**
  * 递归过滤树结构收起的节点
- * @param {Array} tree
  * @return {null}
+ * @param arr
  */
 export function filterTreeByFoldStatus(arr) {
   arr.map((item) => {
@@ -110,6 +111,7 @@ export function filterTreeByFoldStatus(arr) {
 /**
  * 递归获取树结构所有选中的节点
  * @param {Array} tree
+ * @param trueCheckLabel
  * @return {Array}
  */
 export function getAllCheckedNodeList(tree, trueCheckLabel) {
@@ -190,6 +192,7 @@ export function getAllParentNodeList(tree, nodeId) {
  * @param {Array} tree
  * @param {String} checkedNodeList
  * @param {String} status
+ * @param trueEditLabel
  * @return {null}
  */
 export function setParentCheckYes(tree, checkedNodeList, status, trueEditLabel) {
@@ -209,6 +212,7 @@ export function setParentCheckYes(tree, checkedNodeList, status, trueEditLabel) 
  * @param {Array} tree
  * @param {Object} node
  * @param {String} status
+ * @param trueEditLabel
  * @return {null}
  */
 export function setChildrenCheck(tree, node, status, trueEditLabel) {
@@ -259,8 +263,10 @@ export function recursionTreeForNode(tree, nodeId) {
 
 /**
  * 递归取消节点的父节点是否应该取消
- * @param {Array} tree
+ * @param arr
  * @param {Object} node
+ * @param statusObj
+ * @param statusObj
  * @return {null}
  */
 export function parentShouldUnCheck(arr, node, statusObj) {

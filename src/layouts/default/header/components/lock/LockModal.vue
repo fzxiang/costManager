@@ -8,7 +8,7 @@
   >
     <div :class="`${prefixCls}__entry`">
       <div :class="`${prefixCls}__header`">
-        <img :src="avatar" :class="`${prefixCls}__header-img`" />
+        <img :src="avatar" :class="`${prefixCls}__header-img`" alt="" />
         <p :class="`${prefixCls}__header-name`">
           {{ getRealName }}
         </p>
@@ -28,7 +28,7 @@
   import { defineComponent, computed } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { BasicModal, useModalInner } from '/@/components/Modal/index';
+  import { BasicModal, useModalInner } from '@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
 
   import { useUserStore } from '/@/store/modules/user';

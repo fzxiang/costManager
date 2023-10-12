@@ -167,7 +167,7 @@ export const useMultipleTabStore = defineStore({
         }
         this.tabList.push(route);
       }
-      this.updateCacheTab();
+      await this.updateCacheTab();
       cacheTab && Persistent.setLocal(MULTIPLE_TABS_KEY, this.tabList);
     },
 
@@ -187,7 +187,7 @@ export const useMultipleTabStore = defineStore({
       if (path !== tab.path) {
         // Closed is not the activation tab
         close(tab);
-        this.updateCacheTab();
+        await this.updateCacheTab();
         return;
       }
 
@@ -266,9 +266,9 @@ export const useMultipleTabStore = defineStore({
             pathList.push(item.fullPath);
           }
         }
-        this.bulkCloseTabs(pathList);
+        await this.bulkCloseTabs(pathList);
       }
-      this.updateCacheTab();
+      await this.updateCacheTab();
       handleGotoPage(router);
     },
 
@@ -286,9 +286,9 @@ export const useMultipleTabStore = defineStore({
             pathList.push(item.fullPath);
           }
         }
-        this.bulkCloseTabs(pathList);
+        await this.bulkCloseTabs(pathList);
       }
-      this.updateCacheTab();
+      await this.updateCacheTab();
       handleGotoPage(router);
     },
 
@@ -318,8 +318,8 @@ export const useMultipleTabStore = defineStore({
           }
         }
       }
-      this.bulkCloseTabs(pathList);
-      this.updateCacheTab();
+      await this.bulkCloseTabs(pathList);
+      await this.updateCacheTab();
       handleGotoPage(router);
     },
 

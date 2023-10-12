@@ -1,5 +1,5 @@
 import type { BasicTableProps, TableActionType, FetchParams, BasicColumn } from '../types/table';
-import type { PaginationProps } from '../types/pagination';
+import type { PaginationProps } from '@/components/Table';
 import type { DynamicProps } from '/#/utils';
 import type { FormActionType } from '/@/components/Form';
 import type { WatchStopHandle } from 'vue';
@@ -147,7 +147,7 @@ export function useTable(tableProps?: Props): [
       return unref(formRef) as unknown as FormActionType;
     },
     setShowPagination: async (show: boolean) => {
-      getTableInstance().setShowPagination(show);
+      await getTableInstance().setShowPagination(show);
     },
     getShowPagination: () => {
       return toRaw(getTableInstance().getShowPagination());

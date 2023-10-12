@@ -7,13 +7,7 @@
         class="tree-table-wrapper"
         :style="{ paddingRight: scrollbarWidth + 'px' }"
       >
-        <table
-          cellspacing="0"
-          cellpadding="0"
-          border="0"
-          class="tree-table-header"
-          style="width: 100%"
-        >
+        <table class="tree-table-header" style="width: 100%">
           <thead class="tree-table-header-thead">
             <tr v-for="(trItem, index) in finalTableColumns" :key="index">
               <th
@@ -42,14 +36,7 @@
         class="tree-table-wrapper"
         :style="{ height: autoHeight, overflow: isShowScrollbar ? 'auto' : 'hidden' }"
       >
-        <table
-          ref="tableBody"
-          cellspacing="0"
-          cellpadding="0"
-          border="0"
-          class="tree-table-body"
-          style="width: 100%"
-        >
+        <table ref="tableBody" class="tree-table-body" style="width: 100%">
           <thead style="visibility: collapse" class="tree-table-header-thead">
             <tr v-for="(trItem, index) in finalTableColumns" :key="index">
               <th
@@ -418,7 +405,6 @@
       /**
        * 展开折叠事件
        * @param {Object} node 当前节点
-       * @param {Number} foldNum
        * @return {null}
        */
       onFold(node) {
@@ -427,7 +413,7 @@
       },
       /**
        * 选择复选框的处理
-       * @param {String} val 选择状态
+       * @param e
        * @param {Object} node 当前节点
        * @return {null}
        */
@@ -484,6 +470,10 @@
       /**
        * 修改节点属性的值
        * @param {Array} list 当前节点
+       * @param key
+       * @param value
+       * @param key
+       * @param value
        * @return {null}
        */
       changeNodeValue(list, key, value) {

@@ -88,7 +88,7 @@ export const getMenus = async (): Promise<Menu[]> => {
 
 export async function getCurrentParentPath(currentPath: string) {
   const menus = await getAsyncMenus();
-  const allParentPath = await getAllParentPath(menus, currentPath);
+  const allParentPath = getAllParentPath(menus, currentPath);
   return allParentPath?.[0];
 }
 
