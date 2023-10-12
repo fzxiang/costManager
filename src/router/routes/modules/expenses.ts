@@ -30,12 +30,20 @@ const comp: AppRouteModule = {
         title: '编制表',
       },
     },
+    // {
+    //   path: 'project',
+    //   name: 'ExpensesProject',
+    //   component: () => import('/@/views/expenses/project/index.vue'),
+    //   meta: {
+    //     title: '项目人工成本预算',
+    //   },
+    // },
     {
-      path: 'project',
-      name: 'ExpensesProject',
-      component: () => import('/@/views/expenses/project/index.vue'),
+      path: 'laborCosts',
+      name: 'ExpensesLaborCosts',
+      component: () => import('/src/views/expenses/laborCosts/index.vue'),
       meta: {
-        title: '项目人工成本预算',
+        title: '人工成本导入',
       },
     },
   ],
