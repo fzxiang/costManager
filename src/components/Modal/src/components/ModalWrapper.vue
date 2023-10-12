@@ -103,7 +103,7 @@
       });
 
       async function scrollTop() {
-        nextTick(() => {
+        await nextTick(() => {
           const wrapperRefDom = unref(wrapperRef);
           if (!wrapperRefDom) return;
           (wrapperRefDom as any)?.scrollTo?.(0);
