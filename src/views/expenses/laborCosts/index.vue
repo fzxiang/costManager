@@ -70,5 +70,9 @@
   // 导入
   function handleChange(list: string[]) {
     createMessage.info(`已上传文件${JSON.stringify(list)}`);
+    const $grid = xGrid.value;
+    if ($grid) {
+      $grid.commitProxy('reload');
+    }
   }
 </script>
