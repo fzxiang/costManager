@@ -1,5 +1,5 @@
 import { defHttp } from '/@/utils/http/axios';
-import { type BasicPageParams, type BasicFetchResult } from '/@/api/model/baseModel';
+import { type BasicFetchResult } from '/@/api/model/baseModel';
 import { type UploadFileParams } from '/#/axios';
 
 enum Api {
@@ -12,13 +12,11 @@ enum Api {
  */
 
 export interface List {
-  center: string;
-  department: string;
-  id: string;
-  job: string;
-  num: string;
+  date: string;
+  cost: number;
+  hour: number;
 }
-export const getListApi = (params: { center?: string } & BasicPageParams) =>
+export const getListApi = (params: { year?: string }) =>
   defHttp.get<BasicFetchResult<List>>({
     url: Api.LIST,
     params,

@@ -14,6 +14,7 @@ export const vxeTableColumns: VxeGridPropTypes.Columns = [
     align: 'center',
     minWidth: 150,
     showOverflow: 'tooltip',
+    formatter: ({ cellValue }) => Number(cellValue).toFixed(2),
   },
   {
     title: '合计工时',
@@ -21,6 +22,7 @@ export const vxeTableColumns: VxeGridPropTypes.Columns = [
     align: 'center',
     minWidth: 150,
     showOverflow: 'tooltip',
+    formatter: ({ cellValue }) => Number(cellValue).toFixed(2),
   },
 ];
 
