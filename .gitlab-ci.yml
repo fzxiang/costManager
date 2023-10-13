@@ -1,0 +1,117 @@
+stages:
+  - build
+  - package
+  - deploy
+
+variables:
+  PROJECT_NAME: cost-management
+  SERVICE: web
+  DOCKER_IMAGE_NAME: $PROJECT_NAME/$SERVICE/$CI_COMMIT_REF_NAME
+  DOCKER_DRIVER: overlay2
+  DOCKERFILE_PATH: ./Dockerfile
+
+build:
+  stage: build
+  image: docker:dind
+  environment:
+    name: review/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHORT_SHA
+    url: http://$CI_COMMIT_REF_NAME.cost-management.paoyou.work
+  before_script:
+    - DOCKER_REGISTRY=$(cat $DOCKER_AUTH_CONFIG | grep DOCKER_REGISTRY | awk -v FS='=' '{print $2}')
+    - DOCKER_AUTH_USER=$(cat $DOCKER_AUTH_CONFIG | grep DOCKER_AUTH_USER | awk -v FS='=' '{print $2}')
+    - DOCKER_AUTH_TOKEN=$(cat $DOCKER_AUTH_CONFIG | grep DOCKER_AUTH_TOKEN | awk -v FS='=' '{print $2}')
+    - echo "$DOCKER_AUTH_TOKEN" | docker login $DOCKER_REGISTRY --username "$DOCKER_AUTH_USER" --password-stdin
+  script:
+    - cat $ENV > .env.production
+    - docker pull $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME || true
+    - DOCKER_BUILDKIT=1 docker build --force-rm -f $DOCKERFILE_PATH -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:$CI_COMMIT_SHORT_SHA -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME .
+  only:
+    - master
+    - beta
+    - dev
+    - cicd
+
+package:
+  stage: package
+  image: docker:dind
+  variables:
+    GIT_STRATEGY: none
+  environment:
+    name: review/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHORT_SHA
+    url: http://$CI_COMMIT_REF_NAME.cost-management.paoyou.work
+  before_script:
+    - DOCKER_REGISTRY=$(cat $DOCKER_AUTH_CONFIG | grep DOCKER_REGISTRY | awk -v FS='=' '{print $2}')
+    - DOCKER_AUTH_USER=$(cat $DOCKER_AUTH_CONFIG | grep DOCKER_AUTH_USER | awk -v FS='=' '{print $2}')
+    - DOCKER_AUTH_TOKEN=$(cat $DOCKER_AUTH_CONFIG | grep DOCKER_AUTH_TOKEN | awk -v FS='=' '{print $2}')
+    - echo "$DOCKER_AUTH_TOKEN" | docker login $DOCKER_REGISTRY --username "$DOCKER_AUTH_USER" --password-stdin
+  script:
+    - docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+    - docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME
+  only:
+    - master
+    - beta
+    - dev
+    - cicd
+
+deploy-to-development:
+  stage: deploy
+  image: nginx:alpine
+  variables:
+    GIT_STRATEGY: none
+  environment:
+    name: review/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHORT_SHA
+    url: http://$CI_COMMIT_REF_NAME.cost-management.paoyou.work
+  before_script:
+    - DEPLOY_URL=$(cat $DEPLOY_CONFIG | grep DEPLOY_URL | awk -v FS='=' '{print $2}')
+    - DEPLOY_KEY=$(cat $DEPLOY_CONFIG | grep DEPLOY_KEY | awk -v FS='=' '{print $2}')
+  script:
+    - TIME=$(date +%s)
+    - NONCE_STR=$(cat /proc/sys/kernel/random/uuid | md5sum |cut -c 1-32)
+    - SIGN=$(echo -n "branch=$CI_COMMIT_REF_NAME&env=development&nonce_str=$NONCE_STR&project=$PROJECT_NAME&service=$SERVICE&time=$TIME&version=$CI_COMMIT_SHORT_SHA$DEPLOY_KEY" | md5sum | awk '{print $1}')
+    - curl -s -w %{http_code} "$DEPLOY_URL/index.php?branch=$CI_COMMIT_REF_NAME&env=development&nonce_str=$NONCE_STR&project=$PROJECT_NAME&service=$SERVICE&time=$TIME&version=$CI_COMMIT_SHORT_SHA&sign=$SIGN"
+  when: manual
+  allow_failure: false
+  only:
+    - cicd
+
+deploy-to-testing:
+  stage: deploy
+  image: nginx:alpine
+  variables:
+    GIT_STRATEGY: none
+  environment:
+    name: testing
+    url: http://testing.cost-management.paoyou.work
+  before_script:
+    - DEPLOY_URL=$(cat $DEPLOY_CONFIG | grep DEPLOY_URL | awk -v FS='=' '{print $2}')
+    - DEPLOY_KEY=$(cat $DEPLOY_CONFIG | grep DEPLOY_KEY | awk -v FS='=' '{print $2}')
+  script:
+    - TIME=$(date +%s)
+    - NONCE_STR=$(cat /proc/sys/kernel/random/uuid | md5sum |cut -c 1-32)
+    - SIGN=$(echo -n "branch=$CI_COMMIT_REF_NAME&env=$CI_ENVIRONMENT_NAME&nonce_str=$NONCE_STR&project=$PROJECT_NAME&service=$SERVICE&time=$TIME&version=$CI_COMMIT_SHORT_SHA$DEPLOY_KEY" | md5sum | awk '{print $1}')
+    - curl -s -w %{http_code} "$DEPLOY_URL/index.php?branch=$CI_COMMIT_REF_NAME&env=$CI_ENVIRONMENT_NAME&nonce_str=$NONCE_STR&project=$PROJECT_NAME&service=$SERVICE&time=$TIME&version=$CI_COMMIT_SHORT_SHA&sign=$SIGN"
+  when: manual
+  allow_failure: false
+  only:
+    - dev
+
+deploy-to-staging:
+  stage: deploy
+  image: nginx:alpine
+  variables:
+    GIT_STRATEGY: none
+  environment:
+    name: staging
+    url: http://staging.cost-management.paoyou.work
+  before_script:
+    - DEPLOY_URL=$(cat $DEPLOY_CONFIG | grep DEPLOY_URL | awk -v FS='=' '{print $2}')
+    - DEPLOY_KEY=$(cat $DEPLOY_CONFIG | grep DEPLOY_KEY | awk -v FS='=' '{print $2}')
+  script:
+    - TIME=$(date +%s)
+    - NONCE_STR=$(cat /proc/sys/kernel/random/uuid | md5sum |cut -c 1-32)
+    - SIGN=$(echo -n "branch=$CI_COMMIT_REF_NAME&env=$CI_ENVIRONMENT_NAME&nonce_str=$NONCE_STR&project=$PROJECT_NAME&service=$SERVICE&time=$TIME&version=$CI_COMMIT_SHORT_SHA$DEPLOY_KEY" | md5sum | awk '{print $1}')
+    - curl -s -w %{http_code} "$DEPLOY_URL/index.php?branch=$CI_COMMIT_REF_NAME&env=$CI_ENVIRONMENT_NAME&nonce_str=$NONCE_STR&project=$PROJECT_NAME&service=$SERVICE&time=$TIME&version=$CI_COMMIT_SHORT_SHA&sign=$SIGN"
+  when: manual
+  allow_failure: false
+  only:
+    - beta

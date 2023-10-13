@@ -38,5 +38,3 @@ pnpm-debug.log*
 .pnpm-store
 
 .devcontainer
-
-.gitlab-ci.yml
