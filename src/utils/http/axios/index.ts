@@ -197,6 +197,10 @@ const transform: AxiosTransform = {
         errMessage = t('sys.api.networkExceptionMsg');
       }
 
+      if (response && response.data && response.data.message) {
+        errMessage = response.data.message;
+      }
+
       if (errMessage) {
         if (errorMessageMode === 'modal') {
           createErrorModal({ title: t('sys.api.errorTip'), content: errMessage });
