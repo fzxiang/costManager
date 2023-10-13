@@ -42,9 +42,6 @@
         buttons: 'buttons',
       },
     },
-    pagerConfig: {
-      pageSize: 12,
-    },
     formConfig: {
       enabled: true,
       items: vxeTableFormSchema,
@@ -56,12 +53,8 @@
         total: 'count',
       },
       ajax: {
-        query: async ({ page, form }) => {
-          return getListApi({
-            page: page.currentPage,
-            page_size: page.pageSize,
-            ...form,
-          });
+        query: async ({ form }) => {
+          return getListApi(form);
         },
       },
     },
