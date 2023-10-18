@@ -24,6 +24,7 @@
               :api="uploadApi"
               title="导入文档"
               :emptyHidePreview="true"
+              :showPreviewNumber="false"
             />
             <a-button
               color="success"
